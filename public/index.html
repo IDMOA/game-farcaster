@@ -7,16 +7,16 @@
     
     <!-- Farcaster Frame Meta Tags -->
     <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="https://pick-game-omega.vercel.app/preview.png" />
+    <meta property="fc:frame:image" content="https://game-farcaster.vercel.app/preview.png" />
     <meta property="fc:frame:button:1" content="Play Game 🎯" />
     <meta property="fc:frame:button:1:action" content="link" />
-    <meta property="fc:frame:button:1:target" content="https://pick-game-omega.vercel.app/" />
+    <meta property="fc:frame:button:1:target" content="https://game-farcaster.vercel.app/" />
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Reaction Clicker Game" />
     <meta property="og:description" content="Click the targets as fast as you can! Test your reflexes in 30 seconds." />
-    <meta property="og:image" content="https://pick-game-omega.vercel.app/preview.png" />
-    <meta property="og:url" content="https://pick-game-omega.vercel.app/" />
+    <meta property="og:image" content="https://game-farcaster.vercel.app/preview.png" />
+    <meta property="og:url" content="https://game-farcaster.vercel.app/" />
     
     <style>
         * {
@@ -33,6 +33,7 @@
             min-height: 100vh;
             color: white;
             overflow-x: hidden;
+            padding: 10px;
         }
         .game-container {
             text-align: center;
@@ -44,6 +45,34 @@
             font-size: 2.5em;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .tab-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid transparent;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        .tab-btn.active {
+            background: rgba(255,255,255,0.4);
+            border-color: rgba(255,255,255,0.5);
+        }
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.3);
         }
         .score-board {
             background: rgba(255,255,255,0.2);
@@ -142,6 +171,112 @@
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             margin-top: 15px;
         }
+        
+        /* Profile Section */
+        .profile-section {
+            background: rgba(255,255,255,0.2);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            margin: 20px 0;
+        }
+        .profile-form {
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin: 15px 0;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1em;
+            backdrop-filter: blur(10px);
+        }
+        .input-group input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+        .player-stats {
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+        .stat-label {
+            opacity: 0.8;
+        }
+        .stat-value {
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        /* Leaderboard */
+        .leaderboard {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            margin: 20px 0;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .leaderboard-item {
+            background: rgba(255,255,255,0.15);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+        .leaderboard-item:hover {
+            transform: translateX(5px);
+            background: rgba(255,255,255,0.25);
+        }
+        .leaderboard-rank {
+            font-size: 1.5em;
+            font-weight: bold;
+            min-width: 40px;
+        }
+        .leaderboard-rank.gold {
+            color: #ffd700;
+        }
+        .leaderboard-rank.silver {
+            color: #c0c0c0;
+        }
+        .leaderboard-rank.bronze {
+            color: #cd7f32;
+        }
+        .leaderboard-player {
+            flex: 1;
+            text-align: left;
+            padding: 0 15px;
+        }
+        .leaderboard-player-name {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .leaderboard-score {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        .empty-state {
+            padding: 40px;
+            opacity: 0.6;
+            font-size: 1.1em;
+        }
+        
         @media (max-width: 600px) {
             h1 {
                 font-size: 2em;
@@ -154,6 +289,10 @@
                 height: 65px;
                 font-size: 24px;
             }
+            .tab-btn {
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
         }
     </style>
 </head>
@@ -161,38 +300,247 @@
     <div class="game-container">
         <h1>🎯 Reaction Clicker</h1>
         
-        <div id="menu">
-            <div class="instructions">
-                Click the targets as fast as you can!<br>
-                You have 30 seconds to get the highest score!
-            </div>
-            <button onclick="startGame()">Start Game</button>
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('game')">🎮 Game</button>
+            <button class="tab-btn" onclick="showTab('profile')">👤 Profile</button>
+            <button class="tab-btn" onclick="showTab('leaderboard')">🏆 Leaderboard</button>
         </div>
 
-        <div id="gamePlay" style="display: none;">
-            <div class="score-board">
-                <div>Score</div>
-                <div class="score" id="score">0</div>
-                <div class="timer" id="timer">Time: 30s</div>
+        <!-- Game Tab -->
+        <div id="gameTab">
+            <div id="menu">
+                <div class="instructions">
+                    Click the targets as fast as you can!<br>
+                    You have 30 seconds to get the highest score!
+                </div>
+                <button onclick="startGame()">Start Game</button>
             </div>
-            <div class="game-area" id="gameArea"></div>
+
+            <div id="gamePlay" style="display: none;">
+                <div class="score-board">
+                    <div>Score</div>
+                    <div class="score" id="score">0</div>
+                    <div class="timer" id="timer">Time: 30s</div>
+                </div>
+                <div class="game-area" id="gameArea"></div>
+            </div>
+
+            <div id="gameOver" class="game-over">
+                <h2>Game Over! 🎉</h2>
+                <div class="final-score" id="finalScore">0</div>
+                <p>Great reflexes!</p>
+                <button onclick="restartGame()">Play Again</button>
+                <button class="share-btn" onclick="shareScore()">Share on Farcaster 🚀</button>
+            </div>
         </div>
 
-        <div id="gameOver" class="game-over">
-            <h2>Game Over! 🎉</h2>
-            <div class="final-score" id="finalScore">0</div>
-            <p>Great reflexes!</p>
-            <button onclick="restartGame()">Play Again</button>
-            <button class="share-btn" onclick="shareScore()">Share on Farcaster 🚀</button>
+        <!-- Profile Tab -->
+        <div id="profileTab" style="display: none;">
+            <div class="profile-section">
+                <h2>Your Profile</h2>
+                <div id="profileForm" class="profile-form">
+                    <div class="input-group">
+                        <input type="text" id="playerName" placeholder="Enter your name" maxlength="20">
+                    </div>
+                    <button onclick="saveProfile()">Save Profile</button>
+                </div>
+                <div id="playerStats" style="display: none;">
+                    <div class="player-stats">
+                        <h3 id="displayName">Player</h3>
+                        <div class="stat-row">
+                            <span class="stat-label">Best Score:</span>
+                            <span class="stat-value" id="bestScore">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Games Played:</span>
+                            <span class="stat-value" id="gamesPlayed">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Total Clicks:</span>
+                            <span class="stat-value" id="totalClicks">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Average Score:</span>
+                            <span class="stat-value" id="avgScore">0</span>
+                        </div>
+                    </div>
+                    <button onclick="editProfile()">Edit Profile</button>
+                    <button onclick="resetStats()" style="background: linear-gradient(135deg, #ff6b6b, #ee5a6f); margin-top: 10px;">Reset Stats</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Tab -->
+        <div id="leaderboardTab" style="display: none;">
+            <h2>🏆 Leaderboard</h2>
+            <div class="leaderboard" id="leaderboardList">
+                <div class="empty-state">No scores yet. Be the first to play!</div>
+            </div>
         </div>
     </div>
 
     <script>
         let score = 0;
         let timeLeft = 30;
-        let gameInterval;
         let timerInterval;
         let targetInterval;
+        let playerData = null;
+
+        // Load player data on start
+        window.addEventListener('DOMContentLoaded', () => {
+            loadPlayerData();
+            loadLeaderboard();
+        });
+
+        function loadPlayerData() {
+            const saved = localStorage.getItem('reactionClickerPlayer');
+            if (saved) {
+                playerData = JSON.parse(saved);
+                showPlayerStats();
+            }
+        }
+
+        function saveProfile() {
+            const name = document.getElementById('playerName').value.trim();
+            if (!name) {
+                alert('Please enter your name!');
+                return;
+            }
+
+            playerData = {
+                name: name,
+                bestScore: 0,
+                gamesPlayed: 0,
+                totalClicks: 0
+            };
+
+            localStorage.setItem('reactionClickerPlayer', JSON.stringify(playerData));
+            showPlayerStats();
+        }
+
+        function editProfile() {
+            document.getElementById('profileForm').style.display = 'block';
+            document.getElementById('playerStats').style.display = 'none';
+            document.getElementById('playerName').value = playerData.name;
+        }
+
+        function showPlayerStats() {
+            document.getElementById('profileForm').style.display = 'none';
+            document.getElementById('playerStats').style.display = 'block';
+            document.getElementById('displayName').textContent = playerData.name;
+            document.getElementById('bestScore').textContent = playerData.bestScore;
+            document.getElementById('gamesPlayed').textContent = playerData.gamesPlayed;
+            document.getElementById('totalClicks').textContent = playerData.totalClicks;
+            
+            const avg = playerData.gamesPlayed > 0 
+                ? Math.round(playerData.totalClicks / playerData.gamesPlayed) 
+                : 0;
+            document.getElementById('avgScore').textContent = avg;
+        }
+
+        function resetStats() {
+            if (confirm('Are you sure you want to reset all your stats?')) {
+                playerData.bestScore = 0;
+                playerData.gamesPlayed = 0;
+                playerData.totalClicks = 0;
+                localStorage.setItem('reactionClickerPlayer', JSON.stringify(playerData));
+                showPlayerStats();
+            }
+        }
+
+        function updatePlayerStats(gameScore) {
+            if (!playerData) {
+                // Create anonymous player
+                playerData = {
+                    name: 'Anonymous',
+                    bestScore: gameScore,
+                    gamesPlayed: 1,
+                    totalClicks: gameScore
+                };
+            } else {
+                playerData.gamesPlayed++;
+                playerData.totalClicks += gameScore;
+                if (gameScore > playerData.bestScore) {
+                    playerData.bestScore = gameScore;
+                }
+            }
+            
+            localStorage.setItem('reactionClickerPlayer', JSON.stringify(playerData));
+            updateLeaderboard(playerData.name, gameScore);
+        }
+
+        function updateLeaderboard(name, newScore) {
+            let leaderboard = JSON.parse(localStorage.getItem('reactionClickerLeaderboard') || '[]');
+            
+            // Find existing player or add new
+            const existingIndex = leaderboard.findIndex(p => p.name === name);
+            if (existingIndex >= 0) {
+                if (newScore > leaderboard[existingIndex].score) {
+                    leaderboard[existingIndex].score = newScore;
+                }
+            } else {
+                leaderboard.push({ name, score: newScore });
+            }
+            
+            // Sort and keep top 10
+            leaderboard.sort((a, b) => b.score - a.score);
+            leaderboard = leaderboard.slice(0, 10);
+            
+            localStorage.setItem('reactionClickerLeaderboard', JSON.stringify(leaderboard));
+            loadLeaderboard();
+        }
+
+        function loadLeaderboard() {
+            const leaderboard = JSON.parse(localStorage.getItem('reactionClickerLeaderboard') || '[]');
+            const container = document.getElementById('leaderboardList');
+            
+            if (leaderboard.length === 0) {
+                container.innerHTML = '<div class="empty-state">No scores yet. Be the first to play!</div>';
+                return;
+            }
+            
+            container.innerHTML = leaderboard.map((player, index) => {
+                let rankClass = '';
+                let medal = '';
+                if (index === 0) { rankClass = 'gold'; medal = '🥇'; }
+                else if (index === 1) { rankClass = 'silver'; medal = '🥈'; }
+                else if (index === 2) { rankClass = 'bronze'; medal = '🥉'; }
+                
+                return `
+                    <div class="leaderboard-item">
+                        <div class="leaderboard-rank ${rankClass}">${medal || (index + 1)}</div>
+                        <div class="leaderboard-player">
+                            <div class="leaderboard-player-name">${player.name}</div>
+                        </div>
+                        <div class="leaderboard-score">${player.score}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showTab(tab) {
+            // Hide all tabs
+            document.getElementById('gameTab').style.display = 'none';
+            document.getElementById('profileTab').style.display = 'none';
+            document.getElementById('leaderboardTab').style.display = 'none';
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            if (tab === 'game') {
+                document.getElementById('gameTab').style.display = 'block';
+                document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            } else if (tab === 'profile') {
+                document.getElementById('profileTab').style.display = 'block';
+                document.querySelectorAll('.tab-btn')[1].classList.add('active');
+                if (playerData) showPlayerStats();
+            } else if (tab === 'leaderboard') {
+                document.getElementById('leaderboardTab').style.display = 'block';
+                document.querySelectorAll('.tab-btn')[2].classList.add('active');
+                loadLeaderboard();
+            }
+        }
 
         function startGame() {
             document.getElementById('menu').style.display = 'none';
@@ -268,6 +616,9 @@
             document.getElementById('gamePlay').style.display = 'none';
             document.getElementById('finalScore').textContent = `Score: ${score}`;
             document.getElementById('gameOver').classList.add('show');
+            
+            // Update stats and leaderboard
+            updatePlayerStats(score);
         }
 
         function restartGame() {
@@ -277,17 +628,14 @@
         function shareScore() {
             const text = `🎯 I scored ${score} points in Reaction Clicker! Can you beat my score?\n\nhttps://pick-game-omega.vercel.app/`;
             
-            // Try to share using Web Share API (mobile)
             if (navigator.share) {
                 navigator.share({
                     title: 'Reaction Clicker Score',
                     text: text,
                 }).catch(() => {
-                    // Fallback to copy to clipboard
                     copyToClipboard(text);
                 });
             } else {
-                // Desktop fallback - copy to clipboard
                 copyToClipboard(text);
             }
         }
