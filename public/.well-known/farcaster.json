@@ -1,19 +1,20 @@
 {
+  "frame": {
+    "name": "Pick up ",
+    "version": "1",
+    "iconUrl": "https://game-farcaster.vercel.app//icon.png",
+    "homeUrl": "https://https://game-farcaster.vercel.app/",
+    "imageUrl": "https://https://game-farcaster.vercel.app//image.png",
+    "splashImageUrl": "https://https://game-farcaster.vercel.app//splash.png",
+    "splashBackgroundColor": "#1a0f2e",
+    "webhookUrl": "https://https://game-farcaster.vercel.app//api/webhook",
+    "subtitle": "pick up ",
+    "description": "pick up",
+    "primaryCategory": "games"
+  },
   "accountAssociation": {
     "header": "eyJmaWQiOjUzNDM3NCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweEExNEZBZjRFRTIwZTg0MTQ2QTkwMzMwMTk3MTQyNzI1Mzk5NTVERjMifQ",
-    "payload": "eyJkb21haW4iOiJnYW1lLWZhcmNhc3Rlci52ZXJjZWwuYXBwIn0",
-    "signature": "cFbjG4cD3mj8GhwrZBvjAqbigzBTgyR0Zoe0dr62zv0k5rrSefUW2lpmiKYq6Bx8tOxzgDD0SgXZZBktLy5epxw="
-  }
-}
-  "miniapp": {
-    "version": "1",
-    "name": "Reaction Clicker",
-    "iconUrl": "https://wallpapers.com/images/high/snake-game-icon-2u07k6i14eluw4oi.webp",
-    "homeUrl": "https://game-farcaster.vercel.app/",
-    "imageUrl": "https://projects.arduinocontent.cc/cover-images/aec6b979-c133-4793-81b3-3df2fe863062.jpg",
-    "buttonTitle": "Start GAME",
-    "splashImageUrl": "https://projects.arduinocontent.cc/cover-images/aec6b979-c133-4793-81b3-3df2fe863062.jpg",
-    "splashBackgroundColor": "#1a0f2e",
-    "description": "Click the targets as fast as you can in 30 seconds and get the highest score!"
+    "payload": "eyJkb21haW4iOiJodHRwcyJ9",
+    "signature": "VuSTN6ii0BS3lq8wm/9K8UKZrMvUOU7OWAWDT4389Ww4wbbLF8eA+iyqqgV1OLeLDoZCVIQDZIlroR9shIJsyxw="
   }
 }
