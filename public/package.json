@@ -1,0 +1,25 @@
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: `
+              default-src 'self' https://game-farcaster.vercel.app;
+              script-src 'self' 'unsafe-inline' 'unsafe-eval' https://game-farcaster.vercel.app;
+              style-src 'self' 'unsafe-inline';
+              img-src 'self' data: https://game-farcaster.vercel.app;
+              connect-src 'self' https://game-farcaster.vercel.app;
+              frame-src 'self';
+            `.replace(/\s{2,}/g, ' ').trim(),
+          },
+        ],
+      },
+    ];
+  },
+};
+
+module.exports = nextConfig;
