@@ -7,11 +7,11 @@
   "miniapp": {
     "version": "1",
     "name": "Reaction Clicker",
-    "iconUrl": "https://cdn-icons-png.flaticon.com/512/3840/3840679.png",
+    "iconUrl": "https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/1f3af.png",
     "homeUrl": "https://game-farcaster.vercel.app/",
-    "imageUrl": "https://cdn-icons-png.flaticon.com/512/2991/2991148.png",
+    "imageUrl": "https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/1f3af.png",
     "buttonTitle": "Start GAME",
-    "splashImageUrl": "https://cdn-icons-png.flaticon.com/512/2991/2991148.png",
+    "splashImageUrl": "https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/1f3af.png",
     "splashBackgroundColor": "#1a0f2e",
     "description": "Click the targets as fast as you can in 30 seconds and get the highest score!"
   }
