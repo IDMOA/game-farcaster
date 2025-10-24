@@ -5,9 +5,10 @@
     "signature": "chwC8rdD6WGS5DOR23luG6WMg5hJ1TopgI2ZJ/UR5xVsN92sE2RX7Hh9ouCfKyTnpNLizbfAv/b93aTp9a41gBw="
   },
   "frame": {
-    "version": "next",
+    "version": "1",
     "name": "Reaction Clicker",
-    "homeUrl": "https://game-farcaster.vercel.app/"
+    "homeUrl": "https://game-farcaster.vercel.app/",
+    "imageUrl": "https://via.placeholder.com/200x200/667eea/ffffff?text=RT"
   }
 }
 
