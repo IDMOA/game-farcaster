@@ -16,5 +16,3 @@
     "description": "Click the targets as fast as you can in 30 seconds and get the highest score!"
   }
 }
-I changed the payload to encode YOUR domain: {"domain":"game-farcaster.vercel.app"}
-Try this now! This should work perfectly. 🎯RetryClaude does not have the ability to run the code it generates yet.Claude can make mistakes. Please double-check responses.
