@@ -3,15 +3,15 @@
     "header": "eyJmaWQiOjUzNDM3NCwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDgxNTlCYWM3ZDJhMzNkNGZFQTg0Q2U3YjViNjQwQzJGMjM1MTk4ZTAifQ",
     "payload": "eyJkb21haW4iOiJnYW1lLWZhcmNhc3Rlci52ZXJjZWwuYXBwIn0",
     "signature": "chwC8rdD6WGS5DOR23luG6WMg5hJ1TopgI2ZJ/UR5xVsN92sE2RX7Hh9ouCfKyTnpNLizbfAv/b93aTp9a41gBw="
-{
+ },
   "miniapp": {
     "version": "1",
     "name": "Reaction Clicker",
     "iconUrl": "https://em-content.zobj.net/source/apple/391/direct-hit_1f3af.png",
     "homeUrl": "https://game-farcaster.vercel.app/",
-    "imageUrl": "https://em-content.zobj.net/source/apple/391/direct-hit_1f3af.png",
-    "buttonTitle": "Play Now",
-    "splashImageUrl": "https://em-content.zobj.net/source/apple/391/direct-hit_1f3af.png",
+    "imageUrl": "https://em-content.zobj.net/source/apple/391/bullseye_1f3af.png",
+    "buttonTitle": "Start GAME",
+    "splashImageUrl": "https://em-content.zobj.net/source/apple/391/bullseye_1f3af.png",
     "splashBackgroundColor": "#1a0f2e",
     "description": "Click the targets as fast as you can in 30 seconds and get the highest score!"
   }
