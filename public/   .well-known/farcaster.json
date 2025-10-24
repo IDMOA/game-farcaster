@@ -1,18 +1,16 @@
 {
   "accountAssociation": {
-    "header": "eyJmaWQiOjUyNjk5MiwidHlwZSI6ImF1dGgiLCJrZXkiOiIweDQ3ZGQ2NjQ0YWRjMDUwZWVlOTQxNDNCZUZhN0Y1QTJmNDU1RDNjNzMifQ",
-    "payload": "eyJkb21haW4iOiJzbmFrZS1nYW1lLWJ5LWFsYy52ZXJjZWwuYXBwIn0",
-    "signature": "ecOWfY4PZ9DwWQs1eu+/QOkAApJ0tj0jR+0LLZOnXaJCr95gGg2u7Vr9k3rDiLMikZf7LxnzyrcMcWGN0F9pSRw="
+    "header": "eyJmaWQiOjEsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAifQ",
+    "payload": "eyJkb21haW4iOiJnYW1lLWZhcmNhc3Rlci52ZXJjZWwuYXBwIn0",
+    "signature": "MHg..."
   },
-  "miniapp": {
-    "version": "1",
-    "name": "SNAKE GAME",
-    "iconUrl": "https://wallpapers.com/images/high/snake-game-icon-2u07k6i14eluw4oi.webp",
-    "homeUrl": "https://snake-game-by-alc.vercel.app/",
-    "imageUrl": "https://projects.arduinocontent.cc/cover-images/aec6b979-c133-4793-81b3-3df2fe863062.jpg",
-    "buttonTitle": "Start GAME",
-    "splashImageUrl": "https://projects.arduinocontent.cc/cover-images/aec6b979-c133-4793-81b3-3df2fe863062.jpg",
-    "splashBackgroundColor": "#1a0f2e",
-    "description": "Match with Farcaster users for timed 1-on-1 conversations based on shared interests"
+  "frame": {
+    "version": "next",
+    "name": "Reaction Clicker",
+    "iconUrl": "https://game-farcaster.vercel.app/icon.png",
+    "splashImageUrl": "https://game-farcaster.vercel.app/splash.png",
+    "splashBackgroundColor": "#667eea",
+    "homeUrl": "https://game-farcaster.vercel.app/",
+    "webhookUrl": "https://game-farcaster.vercel.app/api/webhook"
   }
 }
