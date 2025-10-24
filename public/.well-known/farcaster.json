@@ -6,13 +6,13 @@
   },
   "miniapp": {
     "version": "1",
-    "name": "SNAKE GAME",
-    "iconUrl": "https://wallpapers.com/images/high/snake-game-icon-2u07k6i14eluw4oi.webp",
-    "homeUrl": "https://snake-game-by-alc.vercel.app/",
-    "imageUrl": "https://projects.arduinocontent.cc/cover-images/aec6b979-c133-4793-81b3-3df2fe863062.jpg",
+    "name": "Reaction Clicker",
+    "iconUrl": "https://cdn-icons-png.flaticon.com/512/3840/3840679.png",
+    "homeUrl": "https://game-farcaster.vercel.app/",
+    "imageUrl": "https://cdn-icons-png.flaticon.com/512/2991/2991148.png",
     "buttonTitle": "Start GAME",
-    "splashImageUrl": "https://projects.arduinocontent.cc/cover-images/aec6b979-c133-4793-81b3-3df2fe863062.jpg",
+    "splashImageUrl": "https://cdn-icons-png.flaticon.com/512/2991/2991148.png",
     "splashBackgroundColor": "#1a0f2e",
-    "description": "Match with Farcaster users for timed 1-on-1 conversations based on shared interests"
+    "description": "Click the targets as fast as you can in 30 seconds and get the highest score!"
   }
 }
