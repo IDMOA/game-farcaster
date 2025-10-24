@@ -1,9 +1,9 @@
 {
   "accountAssociation": {
-    "header": "eyJmaWQiOjUzNDM3NCwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDgxNTlCYWM3ZDJhMzNkNGZFQTg0Q2U3YjViNjQwQzJGMjM1MTk4ZTAifQ",
-    "payload": "eyJkb21haW4iOiJnYW1lLWZhcmNhc3Rlci52ZXJjZWwuYXBwIn0",
-    "signature": "chwC8rdD6WGS5DOR23luG6WMg5hJ1TopgI2ZJ/UR5xVsN92sE2RX7Hh9ouCfKyTnpNLizbfAv/b93aTp9a41gBw="
-},
+    "header": "eyJmaWQiOjUyNjk5MiwidHlwZSI6ImF1dGgiLCJrZXkiOiIweDQ3ZGQ2NjQ0YWRjMDUwZWVlOTQxNDNCZUZhN0Y1QTJmNDU1RDNjNzMifQ",
+    "payload": "eyJkb21haW4iOiJzbmFrZS1nYW1lLWJ5LWFsYy52ZXJjZWwuYXBwIn0",
+    "signature": "ecOWfY4PZ9DwWQs1eu+/QOkAApJ0tj0jR+0LLZOnXaJCr95gGg2u7Vr9k3rDiLMikZf7LxnzyrcMcWGN0F9pSRw="
+  },
   "miniapp": {
     "version": "1",
     "name": "SNAKE GAME",
