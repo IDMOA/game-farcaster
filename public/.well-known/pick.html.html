@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reaction Clicker - Farcaster Mini App</title>
+    
+    <!-- Farcaster Frame Meta Tags -->
+    <meta property="fc:frame" content="vNext" />
+    <meta property="fc:frame:image" content="https://pick-game-omega.vercel.app/preview.png" />
+    <meta property="fc:frame:button:1" content="Play Game 🎯" />
+    <meta property="fc:frame:button:1:action" content="link" />
+    <meta property="fc:frame:button:1:target" content="https://pick-game-omega.vercel.app/" />
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Reaction Clicker Game" />
+    <meta property="og:description" content="Click the targets as fast as you can! Test your reflexes in 30 seconds." />
+    <meta property="og:image" content="https://pick-game-omega.vercel.app/preview.png" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+        .game-container {
+            text-align: center;
+            padding: 20px;
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .score-board {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+        .score {
+            font-size: 3em;
+            font-weight: bold;
+            color: #fff;
+        }
+        .timer {
+            font-size: 1.5em;
+            margin-top: 10px;
+            color: #ffd700;
+        }
+        .game-area {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            margin: 20px 0;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            touch-action: none;
+        }
+        .target {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.1s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .target:hover {
+            transform: scale(1.1);
+        }
+        .target:active {
+            transform: scale(0.9);
+        }
+        button {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            font-weight: bold;
+            -webkit-tap-highlight-color: transparent;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(0,0,0,0.4);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .game-over {
+            display: none;
+            background: rgba(255,255,255,0.2);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .game-over.show {
+            display: block;
+        }
+        .final-score {
+            font-size: 2.5em;
+            color: #ffd700;
+            margin: 15px 0;
+        }
+        .instructions {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 0.9em;
+            backdrop-filter: blur(10px);
+        }
+        .share-btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            margin-top: 15px;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+            .game-area {
+                height: 350px;
+            }
+            .target {
+                width: 65px;
+                height: 65px;
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🎯 Reaction Clicker</h1>
+        
+        <div id="menu">
+            <div class="instructions">
+                Click the targets as fast as you can!<br>
+                You have 30 seconds to get the highest score!
+            </div>
+            <button onclick="startGame()">Start Game</button>
+        </div>
+
+        <div id="gamePlay" style="display: none;">
+            <div class="score-board">
+                <div>Score</div>
+                <div class="score" id="score">0</div>
+                <div class="timer" id="timer">Time: 30s</div>
+            </div>
+            <div class="game-area" id="gameArea"></div>
+        </div>
+
+        <div id="gameOver" class="game-over">
+            <h2>Game Over! 🎉</h2>
+            <div class="final-score" id="finalScore">0</div>
+            <p>Great reflexes!</p>
+            <button onclick="restartGame()">Play Again</button>
+            <button class="share-btn" onclick="shareScore()">Share on Farcaster 🚀</button>
+        </div>
+    </div>
+
+    <script>
+        let score = 0;
+        let timeLeft = 30;
+        let gameInterval;
+        let timerInterval;
+        let targetInterval;
+
+        function startGame() {
+            document.getElementById('menu').style.display = 'none';
+            document.getElementById('gamePlay').style.display = 'block';
+            document.getElementById('gameOver').classList.remove('show');
+            
+            score = 0;
+            timeLeft = 30;
+            updateScore();
+            updateTimer();
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimer();
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+            
+            targetInterval = setInterval(createTarget, 800);
+            createTarget();
+        }
+
+        function createTarget() {
+            const gameArea = document.getElementById('gameArea');
+            const target = document.createElement('div');
+            target.className = 'target';
+            target.textContent = '🎯';
+            
+            const maxX = gameArea.clientWidth - 70;
+            const maxY = gameArea.clientHeight - 70;
+            const x = Math.random() * maxX;
+            const y = Math.random() * maxY;
+            
+            target.style.left = x + 'px';
+            target.style.top = y + 'px';
+            
+            const handleClick = (e) => {
+                e.preventDefault();
+                score++;
+                updateScore();
+                target.remove();
+                createTarget();
+            };
+            
+            target.onclick = handleClick;
+            target.ontouchstart = handleClick;
+            
+            gameArea.appendChild(target);
+            
+            setTimeout(() => {
+                if (target.parentNode) {
+                    target.remove();
+                }
+            }, 1500);
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+        }
+
+        function updateTimer() {
+            document.getElementById('timer').textContent = `Time: ${timeLeft}s`;
+        }
+
+        function endGame() {
+            clearInterval(timerInterval);
+            clearInterval(targetInterval);
+            
+            const gameArea = document.getElementById('gameArea');
+            gameArea.innerHTML = '';
+            
+            document.getElementById('gamePlay').style.display = 'none';
+            document.getElementById('finalScore').textContent = `Score: ${score}`;
+            document.getElementById('gameOver').classList.add('show');
+        }
+
+        function restartGame() {
+            startGame();
+        }
+
+        function shareScore() {
+            const text = `🎯 I scored ${score} points in Reaction Clicker! Can you beat my score?\n\nhttps://pick-game-omega.vercel.app/`;
+            
+            // Try to share using Web Share API (mobile)
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Reaction Clicker Score',
+                    text: text,
+                }).catch(() => {
+                    // Fallback to copy to clipboard
+                    copyToClipboard(text);
+                });
+            } else {
+                // Desktop fallback - copy to clipboard
+                copyToClipboard(text);
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Score copied to clipboard! Paste it in Warpcast 📋');
+            }).catch(() => {
+                alert('Share this: ' + text);
+            });
+        }
+
+        // Prevent zoom on double tap for mobile
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(e) {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    </script>
+</body>
+</html>
