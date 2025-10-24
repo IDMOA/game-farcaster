@@ -1,18 +1,18 @@
 {
   "accountAssociation": {
     "header": "eyJmaWQiOjUyNjk5MiwidHlwZSI6ImF1dGgiLCJrZXkiOiIweDQ3ZGQ2NjQ0YWRjMDUwZWVlOTQxNDNCZUZhN0Y1QTJmNDU1RDNjNzMifQ",
-    "payload": "eyJkb21haW4iOiJzbmFrZS1nYW1lLWJ5LWFsYy52ZXJjZWwuYXBwIn0",
+    "payload": "eyJkb21haW4iOiJyZWFjdGlvbi1jbGlja2VyLWRlbW8udmVyY2VsLmFwcCJ9",
     "signature": "ecOWfY4PZ9DwWQs1eu+/QOkAApJ0tj0jR+0LLZOnXaJCr95gGg2u7Vr9k3rDiLMikZf7LxnzyrcMcWGN0F9pSRw="
   },
   "miniapp": {
     "version": "1",
-    "name": "SNAKE GAME",
-    "iconUrl": "https://wallpapers.com/images/high/snake-game-icon-2u07k6i14eluw4oi.webp",
-    "homeUrl": "https://snake-game-by-alc.vercel.app/",
-    "imageUrl": "https://projects.arduinocontent.cc/cover-images/aec6b979-c133-4793-81b3-3df2fe863062.jpg",
-    "buttonTitle": "Start GAME",
-    "splashImageUrl": "https://projects.arduinocontent.cc/cover-images/aec6b979-c133-4793-81b3-3df2fe863062.jpg",
-    "splashBackgroundColor": "#1a0f2e",
-    "description": "Match with Farcaster users for timed 1-on-1 conversations based on shared interests"
+    "name": "Reaction Clicker 🎯",
+    "iconUrl": "https://cdn-icons-png.flaticon.com/512/1055/1055646.png",
+    "homeUrl": "https://reaction-clicker-demo.vercel.app/",
+    "imageUrl": "https://images.unsplash.com/photo-1607083208914-14b3e52b09a3?auto=format&fit=crop&w=800&q=80",
+    "buttonTitle": "Play Game 🎮",
+    "splashImageUrl": "https://images.unsplash.com/photo-1607083208914-14b3e52b09a3?auto=format&fit=crop&w=800&q=80",
+    "splashBackgroundColor": "#667eea",
+    "description": "Click the targets as fast as you can! Test your reflexes in 30 seconds."
   }
 }
