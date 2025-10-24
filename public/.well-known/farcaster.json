@@ -6,17 +6,8 @@
   },
   "frame": {
     "version": "next",
-    "name": "Game Farcaster",
-    "iconUrl": "https://game-farcaster.vercel.app/icon.png",
-    "homeUrl": "https://game-farcaster.vercel.app",
-    "imageUrl": "https://game-farcaster.vercel.app/api/og",
-    "button": {
-      "title": "Launch Game",
-      "action": {
-        "type": "launch_frame",
-        "name": "Game Farcaster",
-        "url": "https://game-farcaster.vercel.app"
-      }
-    }
+    "name": "Reaction Clicker",
+    "homeUrl": "https://game-farcaster.vercel.app/"
   }
 }
+
