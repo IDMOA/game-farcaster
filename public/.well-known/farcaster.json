@@ -1,0 +1,14 @@
+{
+  "frame": {
+    "version": "next",
+    "imageUrl": "https://game-farcaster.vercel.app/api/og",
+    "button": {
+      "title": "Launch Game",
+      "action": {
+        "type": "launch_frame",
+        "name": "Game Farcaster",
+        "url": "https://game-farcaster.vercel.app"
+      }
+    }
+  }
+}
