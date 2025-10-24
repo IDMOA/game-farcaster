@@ -1,8 +1,8 @@
 {
   "accountAssociation": {
-    "header": "eyJmaWQiOjUzNDM3NCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweEExNEZBZjRFRTIwZTg0MTQ2QTkwMzMwMTk3MTQyNzI1Mzk5NTVERjMifQ",
+    "header": "eyJmaWQiOjUzNDM3NCwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDgxNTlCYWM3ZDJhMzNkNGZFQTg0Q2U3YjViNjQwQzJGMjM1MTk4ZTAifQ",
     "payload": "eyJkb21haW4iOiJnYW1lLWZhcmNhc3Rlci52ZXJjZWwuYXBwIn0",
-    "signature": "cFbjG4cD3mj8GhwrZBvjAqbigzBTgyR0Zoe0dr62zv0k5rrSefUW21pmiKYq6Bx8t0xzgDD0SgXZZBktLy5epxw="
+    "signature": "chwC8rdD6WGS5DOR23luG6WMg5hJ1TopgI2ZJ/UR5xVsN92sE2RX7Hh9ouCfKyTnpNLizbfAv/b93aTp9a41gBw="
   },
   "frame": {
     "version": "next",
@@ -13,10 +13,4 @@
     "button": {
       "title": "Launch Game",
       "action": {
-        "type": "launch_frame",
-        "name": "Game Farcaster",
-        "url": "https://game-farcaster.vercel.app"
-      }
-    }
-  }
-}
+        "type": "launch_fram
