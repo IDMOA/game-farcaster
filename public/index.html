@@ -7,7 +7,7 @@
     
     <!-- Farcaster Frame Meta Tags -->
     <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="https://game-farcaster.vercel.app/preview.png" />
+    <meta property="fc:frame:image" content="https://via.placeholder.com/1200x630/667eea/ffffff?text=🎯+Reaction+Clicker+Game" />
     <meta property="fc:frame:button:1" content="Play Game 🎯" />
     <meta property="fc:frame:button:1:action" content="link" />
     <meta property="fc:frame:button:1:target" content="https://game-farcaster.vercel.app/" />
@@ -15,7 +15,7 @@
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Reaction Clicker Game" />
     <meta property="og:description" content="Click the targets as fast as you can! Test your reflexes in 30 seconds." />
-    <meta property="og:image" content="https://game-farcaster.vercel.app/preview.png" />
+    <meta property="og:image" content="https://via.placeholder.com/1200x630/667eea/ffffff?text=🎯+Reaction+Clicker+Game" />
     <meta property="og:url" content="https://game-farcaster.vercel.app/" />
     
     <style>
@@ -379,7 +379,15 @@
         </div>
     </div>
 
+    <!-- Farcaster SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@farcaster/frame-sdk@0.1.0/dist/frame-sdk.umd.js"></script>
+    
     <script>
+        // Initialize Farcaster SDK
+        if (typeof sdk !== 'undefined') {
+            sdk.actions.ready();
+        }
+        
         let score = 0;
         let timeLeft = 30;
         let timerInterval;
