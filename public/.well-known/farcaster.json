@@ -1,7 +1,13 @@
 {
   "accountAssociation": {
-    "header": "eyJmaWQiOjUzNDM3NCwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDgxNTlCYWM3ZDJhMzNkNGZFQTg0Q2U3YjViNjQwQzJGMjM1MTk4ZTAifQ",
-    "payload": "eyJkb21haW4iOiJnYW1lLWZhcmNhc3Rlci52ZXJjZWwuYXBwIn0",
+    "header": {
+      "fid": 534374,
+      "type": "custody",
+      "key": "0x8159Bac7d2a33d4FEA84Ce7b5b640C2F235198e0"
+    },
+    "payload": {
+      "domain": "game-farcaster.vercel.app"
+    },
     "signature": "chwC8rdD6WGS5DOR23luG6WMg5hJ1TopgI2ZJ/UR5xVsN92sE2RX7Hh9ouCfKyTnpNLizbfAv/b93aTp9a41gBw="
   },
   "frame": {
@@ -20,4 +26,5 @@
     }
   }
 }
+
 
