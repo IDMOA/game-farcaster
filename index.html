@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+<title>Snake – Farcaster Mini App (TX Required + Mobile)</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto; background:#0b0f12; color:#e7ecf0; display:grid; place-items:center; min-height:100dvh; }
+  .wrap { width:min(520px,96vw); position:relative; padding:12px; }
+  .card { background:#12171b; border:1px solid #1f2a32; border-radius:14px; padding:16px; box-shadow:0 10px 30px rgba(0,0,0,.35); }
+  .row { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .title { font-weight:800; font-size:20px; margin:0 0 8px; }
+  .muted { color:#9aa7b1; font-size:14px; line-height:1.35; }
+  button { appearance:none; border:0; background:#1dd979; color:#04130c; font-weight:700; padding:10px 16px; border-radius:12px; cursor:pointer; }
+  button:disabled { opacity:.6; cursor:not-allowed; }
+  .overlay { position:fixed; inset:0; display:grid; place-items:center; background:rgba(8,11,14,.6); backdrop-filter:blur(2px); padding:16px; }
+  .hidden { display:none!important; }
+
+  canvas {
+    display:block;
+    width:min(480px,96vw); height:min(480px,96vw);
+    background:#0e1418; border:1px solid #1f2a32; border-radius:12px; margin:12px auto 10px;
+    touch-action:none; /* prevent pull-to-refresh while swiping */
+  }
+
+  .hud { display:flex; justify-content:space-between; gap:8px; font-size:14px; color:#a8b6c1; }
+  .kbd { background:#0f151a;border:1px solid #1f2a32;border-radius:8px;padding:2px 6px; }
+
+  /* Play Again overlay button */
+  #play-again {
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    padding:12px 18px; border-radius:12px; border:0; font-weight:700;
+    background:#1dd979; color:#04130c; cursor:pointer; box-shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+
+  /* Status panel */
+  #status { margin-top:10px; font-size:13px; line-height:1.35; background:#0f151a; border:1px solid #1f2a32; border-radius:10px; padding:10px; }
+  #status b { color:#cde7d8; }
+  #status .ok { color:#4ade80; }
+  #status .warn { color:#fbbf24; }
+  #status .err { color:#f87171; }
+  #status a { color:#86c6ff; text-decoration:none; }
+
+  /* Mobile controls */
+  #mobile-controls { display:none; margin:6px auto 0; user-select:none; }
+  #mobile-controls .ctrl {
+    width:64px; height:64px; font-size:22px; font-weight:800;
+    background:#1dd979; color:#04130c; border-radius:12px; border:0; cursor:pointer;
+    box-shadow:0 3px 8px rgba(0,0,0,.3);
+  }
+  #mobile-controls .row { justify-content:center; gap:10px; }
+  @media (max-width:720px) {
+    #mobile-controls { display:block; }
+    .hud { font-size:12px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div id="intro-overlay" class="overlay">
+      <div class="card" role="dialog" aria-modal="true">
+        <h1 class="title">Play Snake</h1>
+        <p class="muted">A small Base transfer is required to start (mobile & desktop).</p>
+        <div class="row">
+          <div class="muted">Change recipient/amount in code.</div>
+          <button id="play" type="button">Pay & Play</button>
+        </div>
+        <div id="status" class="hidden"></div>
+      </div>
+    </div>
+
+    <canvas id="game" width="480" height="480" aria-label="Snake game area"></canvas>
+
+    <!-- On-screen mobile controls -->
+    <div id="mobile-controls" class="hidden">
+      <div class="row" style="margin-top:2px;"><button class="ctrl" data-dir="up">↑</button></div>
+      <div class="row"><button class="ctrl" data-dir="left">←</button><button class="ctrl" data-dir="down">↓</button><button class="ctrl" data-dir="right">→</button></div>
+    </div>
+
+    <button id="play-again" class="hidden" type="button">Pay & Play Again</button>
+
+    <div class="hud">
+      <div>Score: <span id="score">0</span></div>
+      <div>Controls: <span class="kbd">↑</span> <span class="kbd">↓</span> <span class="kbd">←</span> <span class="kbd">→</span> / <span class="kbd">WASD</span> / swipe</div>
+    </div>
+  </div>
+
+<script type="module">
+  import { sdk } from 'https://esm.sh/@farcaster/miniapp-sdk'
+  sdk.actions.ready();
+
+  /* ===== CONFIG ===== */
+  const USE_BASE_SEPOLIA = false;     // true: 84532, false: 8453 (your current choice)
+  const RECIPIENT = "0x02212a875c56baE7AF27A5a389FD4e8A11442692";
+  const AMOUNT_ETH = "0.00001";
+
+  const BASE_MAINNET = { chainId: "0x2105",  explorer: "https://basescan.org/tx/" };
+  const BASE_SEPOLIA = { chainId: "0x14a34", explorer: "https://sepolia.basescan.org/tx/" };
+  const TARGET = USE_BASE_SEPOLIA ? BASE_SEPOLIA : BASE_MAINNET;
+
+  /* ===== UI helpers ===== */
+  const statusEl = document.getElementById('status');
+  const playBtn = document.getElementById('play');
+  const playAgainBtn = document.getElementById('play-again');
+  const mobileCtrlEl = document.getElementById('mobile-controls');
+
+  const showStatus = () => statusEl.classList.remove('hidden');
+  const addLine = html => { showStatus(); statusEl.insertAdjacentHTML('beforeend', `<div>${html}</div>`); };
+  const clearStatus = () => statusEl.innerHTML = '';
+  const disable = (el, yes=true) => { if (el) el.disabled = yes; };
+
+  /* ===== Wallet helpers ===== */
+  function parseEther(x){
+    const [w,f=""]=String(x).split('.'); const frac=(f+'0'.repeat(18)).slice(0,18);
+    return '0x'+(BigInt(w)*10n**18n+BigInt(frac)).toString(16);
+  }
+  async function getProvider(){
+    try { const p = await sdk.wallet.getEthereumProvider(); if (p) return p; } catch {}
+    return window.ethereum ?? null;
+  }
+  async function ensureChain(provider, chainId) {
+    const current = (await provider.request({ method:'eth_chainId' }))?.toLowerCase();
+    if (current === chainId.toLowerCase()) return;
+    try {
+      await provider.request({ method:'wallet_switchEthereumChain', params:[{ chainId }] });
+    } catch (e) {
+      if (e?.code === 4902) {
+        await provider.request({ method:'wallet_addEthereumChain', params:[{ chainId }] });
+        await provider.request({ method:'wallet_switchEthereumChain', params:[{ chainId }] });
+      } else { throw e; }
+    }
+  }
+
+  /* ===== REQUIRED TX FLOW ===== */
+  async function requiredPayment() {
+    clearStatus();
+    addLine(`<b>Step 1:</b> locating wallet provider…`);
+    const provider = await getProvider();
+    if (!provider) { addLine(`<span class="err">No wallet available.</span> Open in Farcaster or enable a wallet.`); throw new Error('NO_PROVIDER'); }
+    addLine(`<span class="ok">Provider ready.</span>`);
+
+    addLine(`<b>Step 2:</b> requesting accounts…`);
+    const [from] = await provider.request({ method:'eth_requestAccounts' });
+    addLine(`<span class="ok">Account: ${from.slice(0,6)}…${from.slice(-4)}</span>`);
+
+    addLine(`<b>Step 3:</b> switching to Base…`);
+    await ensureChain(provider, TARGET.chainId);
+    addLine(`<span class="ok">On Base${USE_BASE_SEPOLIA?' Sepolia':''}.</span>`);
+
+    addLine(`<b>Step 4:</b> sending ${AMOUNT_ETH} ETH to ${RECIPIENT.slice(0,6)}…${RECIPIENT.slice(-4)}…`);
+    const hash = await provider.request({
+      method:'eth_sendTransaction',
+      params:[{ from, to: RECIPIENT, value: parseEther(AMOUNT_ETH) }]
+    });
+    addLine(`<span class="ok">TX sent.</span> <a target="_blank" rel="noopener" href="${TARGET.explorer}${hash}">View on Basescan</a>`);
+    return hash;
+  }
+
+  async function payThen(action, triggerBtn) {
+    try {
+      disable(triggerBtn, true);
+      await requiredPayment();   // throws if anything fails
+      await action();            // only runs when tx succeeded
+    } catch (e) {
+      console.warn('Payment gate blocked action:', e);
+      addLine(`<span class="warn">Payment required. Please try again.</span>`);
+    } finally {
+      disable(triggerBtn, false);
+    }
+  }
+
+  /* ===== Start: pay-gated ===== */
+  playBtn.addEventListener('click', (e)=>{
+    e.preventDefault();
+    payThen(() => {
+      document.getElementById('intro-overlay')?.classList.add('hidden');
+      initSnake();
+    }, playBtn);
+  });
+
+  /* ===== Snake (single loop + mobile controls) ===== */
+  let SNAKE_INTERVAL_ID = null;
+  let SNAKE_KEY_HANDLER = null;
+  let TOUCH_LISTENER_REMOVER = null;
+
+  function initSnake() {
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d', { alpha: false });
+    const scoreEl = document.getElementById('score');
+
+    const size = 24;                        // cell size
+    const cells = canvas.width / size;
+
+    // game state
+    let snake = [{ x: 10, y: 10 }];
+    let dir = { x: 1, y: 0 };
+    let nextDir = { x: 1, y: 0 };
+    let food = spawn();
+    let score = 0;
+    let speedMs = 120;
+    let alive = true;
+
+    // clear previous loop & listeners
+    if (SNAKE_INTERVAL_ID) { clearInterval(SNAKE_INTERVAL_ID); SNAKE_INTERVAL_ID = null; }
+    if (SNAKE_KEY_HANDLER)  { window.removeEventListener('keydown', SNAKE_KEY_HANDLER); SNAKE_KEY_HANDLER = null; }
+    if (TOUCH_LISTENER_REMOVER) { TOUCH_LISTENER_REMOVER(); TOUCH_LISTENER_REMOVER = null; }
+
+    // keyboard
+    SNAKE_KEY_HANDLER = (e) => {
+      const k = e.key.toLowerCase();
+      if ((k === 'arrowup'    || k === 'w') && dir.y !== 1)  nextDir = { x: 0,  y: -1 };
+      else if ((k === 'arrowdown'  || k === 's') && dir.y !== -1) nextDir = { x: 0,  y: 1  };
+      else if ((k === 'arrowleft'  || k === 'a') && dir.x !== 1)  nextDir = { x: -1, y: 0  };
+      else if ((k === 'arrowright' || k === 'd') && dir.x !== -1) nextDir = { x: 1,  y: 0  };
+    };
+    window.addEventListener('keydown', SNAKE_KEY_HANDLER);
+
+    // mobile buttons + swipe
+    setupMobileControls((dirName) => {
+      if (dirName === 'up' && dir.y !== 1) nextDir = { x: 0, y: -1 };
+      if (dirName === 'down' && dir.y !== -1) nextDir = { x: 0, y: 1 };
+      if (dirName === 'left' && dir.x !== 1) nextDir = { x: -1, y: 0 };
+      if (dirName === 'right' && dir.x !== -1) nextDir = { x: 1, y: 0 };
+    });
+
+    draw();                                      // initial frame
+    SNAKE_INTERVAL_ID = setInterval(step, speedMs);  // single loop
+
+    function spawn() {
+      let fx, fy;
+      do {
+        fx = Math.floor(Math.random() * cells);
+        fy = Math.floor(Math.random() * cells);
+      } while (snake.some(s => s.x === fx && s.y === fy));
+      return { x: fx, y: fy };
+    }
+
+    function step() {
+      if (!alive) return;
+
+      dir = nextDir;
+      const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+
+      // wrap
+      head.x = (head.x + cells) % cells;
+      head.y = (head.y + cells) % cells;
+
+      // self collision
+      if (snake.some(s => s.x === head.x && s.y === head.y)) {
+        alive = false;
+        gameOver();
+        return;
+      }
+
+      snake.unshift(head);
+
+      // eat
+      if (head.x === food.x && head.y === food.y) {
+        score += 1; scoreEl.textContent = String(score);
+        food = spawn();
+
+        // speed up: reset the one interval (no stacking)
+        if (speedMs > 60) {
+          speedMs -= 4;
+          clearInterval(SNAKE_INTERVAL_ID);
+          SNAKE_INTERVAL_ID = setInterval(step, speedMs);
+        }
+      } else {
+        snake.pop();
+      }
+
+      draw();
+    }
+
+    function draw() {
+      // bg
+      ctx.fillStyle = '#0e1418';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // grid
+      ctx.strokeStyle = '#0f1a21'; ctx.lineWidth = 1;
+      for (let i = 0; i <= cells; i++) {
+        ctx.beginPath(); ctx.moveTo(i * size + 0.5, 0); ctx.lineTo(i * size + 0.5, canvas.height); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, i * size + 0.5); ctx.lineTo(canvas.width, i * size + 0.5); ctx.stroke();
+      }
+
+      // food
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(food.x * size + 2, food.y * size + 2, size - 4, size - 4);
+
+      // snake
+      ctx.fillStyle = '#22c55e';
+      snake.forEach((s, i) => {
+        const pad = i === 0 ? 1 : 3;
+        ctx.fillRect(s.x * size + pad, s.y * size + pad, size - pad * 2, size - pad * 2);
+      });
+    }
+
+    function gameOver() {
+      // stop loop & unbind keys/touch
+      if (SNAKE_INTERVAL_ID) { clearInterval(SNAKE_INTERVAL_ID); SNAKE_INTERVAL_ID = null; }
+      if (SNAKE_KEY_HANDLER)  { window.removeEventListener('keydown', SNAKE_KEY_HANDLER); SNAKE_KEY_HANDLER = null; }
+      if (TOUCH_LISTENER_REMOVER) { TOUCH_LISTENER_REMOVER(); TOUCH_LISTENER_REMOVER = null; }
+
+      // overlay text
+      ctx.fillStyle = 'rgba(0,0,0,.4)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#e7ecf0'; ctx.font = 'bold 32px system-ui'; ctx.textAlign = 'center';
+      ctx.fillText('Game Over', canvas.width / 2, canvas.height / 2 - 6);
+      ctx.font = '16px system-ui'; ctx.fillStyle = '#a8b6c1';
+      ctx.fillText('Payment required to play again', canvas.width / 2, canvas.height / 2 + 20);
+
+      // pay-gated restart
+      playAgainBtn.classList.remove('hidden');
+      const clickOnce = async (e) => {
+        e.preventDefault();
+        await payThen(() => {
+          playAgainBtn.classList.add('hidden');
+          initSnake();
+        }, playAgainBtn);
+
+        // if payment failed, allow another attempt
+        if (!playAgainBtn.classList.contains('hidden')) {
+          playAgainBtn.addEventListener('click', clickOnce, { once:true });
+        }
+      };
+      playAgainBtn.addEventListener('click', clickOnce, { once:true });
+    }
+  }
+
+  /* === Touch + Mobile Controls (swipe + buttons) === */
+  function setupMobileControls(moveHandler) {
+    if (!mobileCtrlEl) return;
+
+    // show buttons on small screens
+    if (window.innerWidth <= 720) mobileCtrlEl.classList.remove('hidden');
+
+    // button clicks
+    mobileCtrlEl.querySelectorAll('button.ctrl').forEach(btn => {
+      btn.addEventListener('click', () => moveHandler(btn.dataset.dir));
+    });
+
+    // swipe gestures
+    let sx = 0, sy = 0, tracking = false;
+
+    const onStart = (e) => { const t = e.touches[0]; sx = t.clientX; sy = t.clientY; tracking = true; };
+    const onMove  = (e) => { if (tracking) e.preventDefault(); }; // stop scrolling while swiping
+    const onEnd   = (e) => {
+      if (!tracking) return; tracking = false;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - sx, dy = t.clientY - sy;
+      const ax = Math.abs(dx), ay = Math.abs(dy);
+      if (Math.max(ax, ay) < 30) return; // ignore micro-swipes
+      if (ax > ay) moveHandler(dx > 0 ? 'right' : 'left');
+      else moveHandler(dy > 0 ? 'down' : 'up');
+    };
+
+    document.addEventListener('touchstart', onStart, { passive:true });
+    document.addEventListener('touchmove',  onMove,  { passive:false });
+    document.addEventListener('touchend',   onEnd,   { passive:true });
+
+    // cleaner for next game init
+    TOUCH_LISTENER_REMOVER = () => {
+      document.removeEventListener('touchstart', onStart);
+      document.removeEventListener('touchmove',  onMove);
+      document.removeEventListener('touchend',   onEnd);
+    };
+  }
+
+  // Debug surfacing
+  window.addEventListener('error', e => console.error('Window error:', e.error||e));
+  window.addEventListener('unhandledrejection', e => console.error('Unhandled promise:', e.reason));
+</script>
+</body>
+</html>
